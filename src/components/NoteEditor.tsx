@@ -21,7 +21,6 @@ export default function NoteEditor({
   const { notes } = useNotes();
   const [currentNote, setCurrentNote] = useState<Note | null>(null);
 
-  // Buscar la nota actual cuando se cambia el noteId
   useEffect(() => {
     if (noteId && notes.length > 0) {
       const note = notes.find((n) => n.id === noteId);
@@ -40,7 +39,7 @@ export default function NoteEditor({
     lastSaved,
     noteId: currentNoteId,
   } = useAutoSave({
-    delay: 800, // Guarda después de 800ms de inactividad
+    delay: 1000,
     initialTitle: currentNote?.title || initialTitle || "",
     initialContent: currentNote?.content || initialContent || "",
     noteId,
