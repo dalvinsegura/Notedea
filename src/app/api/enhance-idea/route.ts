@@ -9,7 +9,6 @@ export async function POST(request: NextRequest) {
   try {
     const { title, content } = await request.json();
 
-    // Validar que hay contenido para procesar
     if (!content || content.trim().length === 0) {
       return NextResponse.json(
         { error: 'El contenido no puede estar vacío' },
@@ -17,7 +16,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validar longitud mínima
     if (content.trim().length < 10) {
       return NextResponse.json(
         { error: 'El contenido es muy corto para procesar' },
