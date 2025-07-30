@@ -19,9 +19,15 @@ export function useIdeaEnhancement({ onEnhancementAccepted }: UseIdeaEnhancement
   const [error, setError] = useState<string | null>(null);
 
   const enhanceIdea = async (title: string, content: string) => {
-    // Validar entrada vacía
+    // Validar entrada vacía con más detalle
     if (!content || content.trim().length === 0) {
-      setError("El contenido no puede estar vacío");
+      setError("El contenido no puede estar vacío. Escribe algo antes de mejorar la idea.");
+      return;
+    }
+
+    // Validar contenido mínimo
+    if (content.trim().length < 10) {
+      setError("El contenido es muy corto. Escribe al menos 10 caracteres para obtener una mejora significativa.");
       return;
     }
 

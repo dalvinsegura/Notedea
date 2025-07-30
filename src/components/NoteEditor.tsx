@@ -104,7 +104,7 @@ export default function NoteEditor({
             </div>
 
             {/* Botón de Enhance Idea */}
-            {content && content.trim().length > 0 && (
+            {content && content.trim().length >= 10 && (
               <button
                 onClick={handleEnhanceIdea}
                 disabled={isEnhancing || isSaving}

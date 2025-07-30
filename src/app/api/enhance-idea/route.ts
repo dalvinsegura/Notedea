@@ -17,6 +17,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Validar longitud mínima
+    if (content.trim().length < 10) {
+      return NextResponse.json(
+        { error: 'El contenido es muy corto para procesar' },
+        { status: 400 }
+      );
+    }
+
     const prompt = `Eres un asistente experto en mejorar ideas y contenido en español. Tu tarea es tomar una idea y mejorarla manteniendo el formato Markdown.
 
 INSTRUCCIONES:
