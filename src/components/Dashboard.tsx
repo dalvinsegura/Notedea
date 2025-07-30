@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNotes } from "@/hooks/useNotes";
 import NoteEditor from "@/components/NoteEditor";
+import NotesList from "@/components/NotesList";
 
 export default function Dashboard() {
   const { user, logout } = useAuth();
@@ -23,21 +24,6 @@ export default function Dashboard() {
 
   const handleNoteIdChange = (noteId: string) => {
     setCurrentNoteId(noteId);
-  };
-
-  const formatDate = (date: Date) => {
-    return date.toLocaleDateString('es-ES', {
-      day: 'numeric',
-      month: 'short',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
-
-  const truncateText = (text: string, maxLength: number = 100) => {
-    if (text.length <= maxLength) return text;
-    return text.substring(0, maxLength) + '...';
   };
 
   return (
@@ -61,16 +47,19 @@ export default function Dashboard() {
 
       <main className="max-w-6xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
-          {/* Botón para crear nueva idea */}
+          {/* Header con botón de nueva idea */}
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-2xl font-semibold text-gray-900">
               Mis Ideas
             </h2>
             <button
               onClick={handleNewNote}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md transition-colors"
+              className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md transition-colors flex items-center space-x-2"
             >
-              + Nueva Idea
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              </svg>
+              <span>Nueva Idea</span>
             </button>
           </div>
 
@@ -89,49 +78,12 @@ export default function Dashboard() {
 
             {/* Lista de ideas */}
             <div className={`${showEditor ? 'lg:col-span-1' : 'lg:col-span-2'}`}>
-              {loading ? (
-                <div className="text-center py-12">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600 mx-auto"></div>
-                  <p className="text-gray-600 mt-4">Cargando ideas...</p>
-                </div>
-              ) : notes.length === 0 ? (
-                <div className="text-center py-12">
-                  <p className="text-gray-600">
-                    No tienes ideas aún. ¡Crea tu primera idea!
-                  </p>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  <h3 className="text-lg font-medium text-gray-900 mb-4">
-                    {notes.length} {notes.length === 1 ? 'idea' : 'ideas'}
-                  </h3>
-                  {notes.map((note) => (
-                    <div
-                      key={note.id}
-                      onClick={() => handleEditNote(note.id)}
-                      className={`bg-white p-4 rounded-lg shadow-sm border cursor-pointer transition-all hover:shadow-md ${
-                        currentNoteId === note.id 
-                          ? 'border-indigo-500 ring-2 ring-indigo-200' 
-                          : 'border-gray-200 hover:border-gray-300'
-                      }`}
-                    >
-                      <div className="flex justify-between items-start mb-2">
-                        <h4 className="font-medium text-gray-900 truncate">
-                          {note.title || 'Sin título'}
-                        </h4>
-                        <span className="text-xs text-gray-500 whitespace-nowrap ml-2">
-                          {formatDate(note.updatedAt)}
-                        </span>
-                      </div>
-                      {note.content && (
-                        <p className="text-gray-600 text-sm">
-                          {truncateText(note.content)}
-                        </p>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              )}
+              <NotesList
+                notes={notes}
+                loading={loading}
+                currentNoteId={currentNoteId}
+                onNoteClick={handleEditNote}
+              />
             </div>
           </div>
         </div>

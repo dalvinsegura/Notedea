@@ -93,14 +93,14 @@ export default function NoteEditor({
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Título de tu idea..."
-          className="w-full text-xl font-semibold border-none outline-none resize-none placeholder-gray-400 bg-transparent"
+          className="w-full text-xl font-semibold border-none outline-none resize-none placeholder-gray-400 bg-transparent text-gray-900 focus:text-gray-900"
         />
 
         <textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
           placeholder="Escribe tu idea aquí..."
-          className="w-full mt-4 min-h-[200px] border-none outline-none resize-none placeholder-gray-400 bg-transparent text-gray-700 leading-relaxed"
+          className="w-full mt-4 min-h-[200px] border-none outline-none resize-none placeholder-gray-400 bg-transparent text-gray-700 leading-relaxed focus:text-gray-800"
           style={{ resize: "none" }}
         />
       </div>
