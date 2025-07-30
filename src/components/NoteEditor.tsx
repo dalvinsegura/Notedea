@@ -1,7 +1,9 @@
 "use client";
 
 import { useAutoSave } from "@/hooks/useAutoSave";
-import { useEffect } from "react";
+import { useNotes } from "@/hooks/useNotes";
+import { useEffect, useState } from "react";
+import { Note } from "@/types/note";
 
 interface NoteEditorProps {
   noteId?: string;
@@ -16,6 +18,19 @@ export default function NoteEditor({
   initialContent,
   onNoteIdChange,
 }: NoteEditorProps) {
+  const { notes } = useNotes();
+  const [currentNote, setCurrentNote] = useState<Note | null>(null);
+
+  // Buscar la nota actual cuando se cambia el noteId
+  useEffect(() => {
+    if (noteId && notes.length > 0) {
+      const note = notes.find((n) => n.id === noteId);
+      setCurrentNote(note || null);
+    } else {
+      setCurrentNote(null);
+    }
+  }, [noteId, notes]);
+
   const {
     title,
     content,
@@ -26,8 +41,8 @@ export default function NoteEditor({
     noteId: currentNoteId,
   } = useAutoSave({
     delay: 800, // Guarda después de 800ms de inactividad
-    initialTitle,
-    initialContent,
+    initialTitle: currentNote?.title || initialTitle || "",
+    initialContent: currentNote?.content || initialContent || "",
     noteId,
   });
 
