@@ -1,6 +1,7 @@
 "use client";
 
 import { Note } from "@/types/note";
+import MarkdownRenderer from "./MarkdownRenderer";
 
 interface NoteCardProps {
   note: Note;
@@ -28,6 +29,19 @@ export default function NoteCard({
     return text.substring(0, maxLength) + "...";
   };
 
+  // Función para extraer texto plano del markdown para el truncado
+  const getPlainTextFromMarkdown = (markdown: string) => {
+    return markdown
+      .replace(/^#+\s+/gm, '') // Eliminar encabezados
+      .replace(/\*\*(.*?)\*\*/g, '$1') // Eliminar negrita
+      .replace(/\*(.*?)\*/g, '$1') // Eliminar cursiva
+      .replace(/`(.*?)`/g, '$1') // Eliminar código inline
+      .replace(/\[(.*?)\]\(.*?\)/g, '$1') // Eliminar enlaces, mantener texto
+      .replace(/^[>\-*+]\s+/gm, '') // Eliminar marcadores de lista y citas
+      .replace(/\n+/g, ' ') // Reemplazar saltos de línea con espacios
+      .trim();
+  };
+
   return (
     <div
       onClick={onClick}
@@ -46,14 +60,21 @@ export default function NoteCard({
         </span>
       </div>
       {note.content && (
-        <p className="text-gray-600 text-sm">{truncateText(note.content)}</p>
+        <div className="text-gray-600 text-sm overflow-hidden">
+          <div className="max-h-16 overflow-hidden">
+            <MarkdownRenderer 
+              content={truncateText(getPlainTextFromMarkdown(note.content), 100)}
+              className="prose-sm prose-gray"
+            />
+          </div>
+        </div>
       )}
 
       <div className="mt-3 flex items-center justify-between">
         <div className="flex items-center space-x-2">
           {note.content && (
-            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800">
-              {note.content.length} caracteres
+            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
+              📝 {getPlainTextFromMarkdown(note.content).length} palabras
             </span>
           )}
         </div>
