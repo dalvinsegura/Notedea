@@ -29,6 +29,24 @@ export const useAutoSave = ({
   const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const isInitialRender = useRef(true);
 
+  useEffect(() => {
+    if (initialTitle !== title) {
+      setTitle(initialTitle);
+    }
+  }, [initialTitle, title]);
+
+  useEffect(() => {
+    if (initialContent !== content) {
+      setContent(initialContent);
+    }
+  }, [initialContent, content]);
+
+  useEffect(() => {
+    if (noteId !== currentNoteId) {
+      setCurrentNoteId(noteId);
+    }
+  }, [noteId, currentNoteId]);
+
   const saveNoteData = useCallback(async (titleToSave: string, contentToSave: string) => {
     if (!user || (!titleToSave.trim() && !contentToSave.trim())) return;
 

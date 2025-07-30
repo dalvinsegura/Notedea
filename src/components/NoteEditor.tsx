@@ -5,6 +5,8 @@ import { useNotes } from "@/hooks/useNotes";
 import { useEffect, useState } from "react";
 import { Note } from "@/types/note";
 import LiveMarkdownEditor from "./LiveMarkdownEditor";
+import EnhancementModal from "./EnhancementModal";
+import { useIdeaEnhancement } from "@/hooks/useIdeaEnhancement";
 
 interface NoteEditorProps {
   noteId?: string;
@@ -52,6 +54,25 @@ export default function NoteEditor({
     }
   }, [currentNoteId, onNoteIdChange]);
 
+  // Hook para mejorar ideas con IA
+  const {
+    enhanceIdea,
+    acceptEnhancement,
+    closeModal,
+    isLoading: isEnhancing,
+    isModalOpen,
+    enhancementResult,
+    error: enhancementError,
+  } = useIdeaEnhancement({
+    onEnhancementAccepted: (enhancedContent) => {
+      setContent(enhancedContent);
+    },
+  });
+
+  const handleEnhanceIdea = () => {
+    enhanceIdea(title, content);
+  };
+
   const formatTime = (date: Date) => {
     return date.toLocaleTimeString("es-ES", {
       hour: "2-digit",
@@ -64,19 +85,49 @@ export default function NoteEditor({
          style={{ minHeight: "600px" }}>
       <div className="px-4 py-3 border-b border-gray-200 bg-gray-50">
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            {isSaving ? (
-              <div className="flex items-center space-x-2 text-blue-600">
-                <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-blue-600"></div>
-                <span className="text-xs">Guardando...</span>
-              </div>
-            ) : lastSaved ? (
-              <div className="text-xs text-gray-500">
-                Guardado a las {formatTime(lastSaved)}
-              </div>
-            ) : (
-              <div className="text-xs text-gray-400">
-                Escribe para guardar automáticamente
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2">
+              {isSaving ? (
+                <div className="flex items-center space-x-2 text-blue-600">
+                  <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-blue-600"></div>
+                  <span className="text-xs">Guardando...</span>
+                </div>
+              ) : lastSaved ? (
+                <div className="text-xs text-gray-500">
+                  Guardado a las {formatTime(lastSaved)}
+                </div>
+              ) : (
+                <div className="text-xs text-gray-400">
+                  Escribe para guardar automáticamente
+                </div>
+              )}
+            </div>
+
+            {/* Botón de Enhance Idea */}
+            {content && content.trim().length >= 10 && (
+              <button
+                onClick={handleEnhanceIdea}
+                disabled={isEnhancing || isSaving}
+                className="flex items-center space-x-2 px-3 py-1.5 text-xs font-medium text-white bg-gradient-to-r from-purple-600 to-blue-600 rounded-md hover:from-purple-700 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+              >
+                {isEnhancing ? (
+                  <>
+                    <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-white"></div>
+                    <span>Mejorando...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>🤖</span>
+                    <span>Enhance Idea</span>
+                  </>
+                )}
+              </button>
+            )}
+
+            {/* Mostrar error si hay */}
+            {enhancementError && (
+              <div className="text-xs text-red-600 bg-red-50 px-2 py-1 rounded">
+                {enhancementError}
               </div>
             )}
           </div>
@@ -127,6 +178,16 @@ console.log('¡Hola mundo!');
           />
         </div>
       </div>
+
+      {/* Modal de mejora de ideas */}
+      <EnhancementModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        originalContent={content}
+        enhancedContent={enhancementResult?.enhancedContent || ""}
+        onAccept={acceptEnhancement}
+        isLoading={isEnhancing}
+      />
     </div>
   );
 }
