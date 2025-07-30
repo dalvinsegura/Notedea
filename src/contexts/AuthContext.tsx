@@ -43,10 +43,24 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
-      setLoading(false);
-    });
+    const unsubscribe = onAuthStateChanged(
+      auth,
+      (user) => {
+        setUser(user);
+        setLoading(false);
+
+        if (process.env.NODE_ENV === "development") {
+          console.log(
+            "Auth state changed:",
+            user ? "User logged in" : "User logged out"
+          );
+        }
+      },
+      (error) => {
+        console.error("Auth state change error:", error);
+        setLoading(false);
+      }
+    );
 
     return unsubscribe;
   }, []);
@@ -70,7 +84,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   const logout = async () => {
-    await signOut(auth);
+    try {
+      await signOut(auth);
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
   };
 
   const value = {
