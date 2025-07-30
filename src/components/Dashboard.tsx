@@ -1,9 +1,22 @@
 "use client";
 
+import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
+import NoteEditor from "@/components/NoteEditor";
 
 export default function Dashboard() {
   const { user, logout } = useAuth();
+  const [showEditor, setShowEditor] = useState(false);
+  const [currentNoteId, setCurrentNoteId] = useState<string | undefined>();
+
+  const handleNewNote = () => {
+    setCurrentNoteId(undefined);
+    setShowEditor(true);
+  };
+
+  const handleNoteIdChange = (noteId: string) => {
+    setCurrentNoteId(noteId);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -24,16 +37,39 @@ export default function Dashboard() {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+      <main className="max-w-4xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
-          <div className="text-center">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-              ¡Hola! Aquí estarán tus ideas
+          {/* Botón para crear nueva idea */}
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-semibold text-gray-900">
+              Mis Ideas
             </h2>
-            <p className="text-gray-600">
-              Próximamente podrás anotar y mejorar tus ideas con IA.
-            </p>
+            <button
+              onClick={handleNewNote}
+              className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md transition-colors"
+            >
+              + Nueva Idea
+            </button>
           </div>
+
+          {/* Editor de notas */}
+          {showEditor && (
+            <div className="mb-6">
+              <NoteEditor
+                noteId={currentNoteId}
+                onNoteIdChange={handleNoteIdChange}
+              />
+            </div>
+          )}
+
+          {/* Lista de ideas (próximamente) */}
+          {!showEditor && (
+            <div className="text-center py-12">
+              <p className="text-gray-600">
+                No tienes ideas aún. ¡Crea tu primera idea!
+              </p>
+            </div>
+          )}
         </div>
       </main>
     </div>
