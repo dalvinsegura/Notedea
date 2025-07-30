@@ -21,7 +21,6 @@ export default function LiveMarkdownEditor({
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Manejar el input
   const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newValue = e.target.value;
     const position = e.target.selectionStart;
@@ -31,7 +30,6 @@ export default function LiveMarkdownEditor({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    // Cmd/Ctrl + Enter para cambiar a preview
     if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
       e.preventDefault();
       setIsEditing(false);
