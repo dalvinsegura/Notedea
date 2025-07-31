@@ -8,7 +8,7 @@ import NotesList from "@/components/NotesList";
 
 export default function Dashboard() {
   const { user, logout } = useAuth();
-  const { notes, loading } = useNotes();
+  const { notes, loading, deleteNote } = useNotes();
   const [showEditor, setShowEditor] = useState(false);
   const [currentNoteId, setCurrentNoteId] = useState<string | undefined>();
 
@@ -24,6 +24,19 @@ export default function Dashboard() {
 
   const handleNoteIdChange = (noteId: string) => {
     setCurrentNoteId(noteId);
+  };
+
+  const handleDeleteNote = async (noteId: string) => {
+    try {
+      await deleteNote(noteId);
+      if (currentNoteId === noteId) {
+        setCurrentNoteId(undefined);
+        setShowEditor(false);
+      }
+    } catch (error) {
+      console.error("Error al eliminar la nota:", error);
+      alert("Error al eliminar la nota. Por favor, inténtalo de nuevo.");
+    }
   };
 
   return (
@@ -91,6 +104,7 @@ export default function Dashboard() {
                 loading={loading}
                 currentNoteId={currentNoteId}
                 onNoteClick={handleEditNote}
+                onNoteDelete={handleDeleteNote}
               />
             </div>
           </div>
