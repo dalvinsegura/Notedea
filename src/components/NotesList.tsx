@@ -8,6 +8,7 @@ interface NotesListProps {
   loading: boolean;
   currentNoteId?: string;
   onNoteClick: (noteId: string) => void;
+  onNoteDelete?: (noteId: string) => void;
 }
 
 export default function NotesList({
@@ -15,6 +16,7 @@ export default function NotesList({
   loading,
   currentNoteId,
   onNoteClick,
+  onNoteDelete,
 }: NotesListProps) {
   if (loading) {
     return (
@@ -64,6 +66,7 @@ export default function NotesList({
             note={note}
             isSelected={currentNoteId === note.id}
             onClick={() => onNoteClick(note.id)}
+            onDelete={onNoteDelete}
           />
         ))}
       </div>
