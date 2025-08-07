@@ -62,6 +62,7 @@ export default function NoteCard({
           ? "border-indigo-500 ring-2 ring-indigo-200"
           : "border-gray-200 hover:border-gray-300"
       }`}
+      data-testid={`note-card-${note.id}`}
     >
       <div className="flex justify-between items-start mb-2">
         <h4 className="font-medium text-gray-900 truncate">
@@ -100,6 +101,7 @@ export default function NoteCard({
               onClick={handleDelete}
               className="p-1 text-gray-400 hover:text-red-600 transition-colors rounded"
               title="Eliminar nota"
+              data-testid={`delete-note-${note.id}`}
             >
               <svg
                 className="w-4 h-4"
