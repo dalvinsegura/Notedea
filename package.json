@@ -6,7 +6,15 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test:selenium": "python -m pytest tests/ -v --html=reports/report.html --self-contained-html",
+    "test:setup": "pip install -r requirements.txt",
+    "test:run": "./run_tests.sh",
+    "test:auth": "python -m pytest tests/test_01_user_authentication.py -v",
+    "test:create": "python -m pytest tests/test_02_create_new_idea.py -v",
+    "test:edit": "python -m pytest tests/test_03_edit_existing_idea.py -v",
+    "test:delete": "python -m pytest tests/test_04_delete_idea.py -v",
+    "test:enhance": "python -m pytest tests/test_05_enhance_idea_with_ai.py -v"
   },
   "dependencies": {
     "firebase": "^12.0.0",

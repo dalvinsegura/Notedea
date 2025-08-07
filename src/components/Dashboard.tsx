@@ -49,6 +49,7 @@ export default function Dashboard() {
               <span className="text-gray-700">Bienvenido, {user?.email}</span>
               <button
                 onClick={logout}
+                id="logout-button"
                 className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md transition-colors"
               >
                 Cerrar sesión
@@ -65,6 +66,7 @@ export default function Dashboard() {
             <h2 className="text-2xl font-semibold text-gray-900">Mis Ideas</h2>
             <button
               onClick={handleNewNote}
+              id="new-idea-button"
               className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md transition-colors flex items-center space-x-2"
             >
               <svg

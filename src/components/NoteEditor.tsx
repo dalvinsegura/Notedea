@@ -108,6 +108,7 @@ export default function NoteEditor({
               <button
                 onClick={handleEnhanceIdea}
                 disabled={isEnhancing || isSaving}
+                id="enhance-idea-button"
                 className="flex items-center space-x-2 px-3 py-1.5 text-xs font-medium text-white bg-gradient-to-r from-purple-600 to-blue-600 rounded-md hover:from-purple-700 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
               >
                 {isEnhancing ? (
@@ -148,6 +149,7 @@ export default function NoteEditor({
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Título de tu idea..."
+            id="note-title-input"
             className="w-full text-xl font-semibold border-none outline-none resize-none placeholder-gray-400 bg-transparent text-gray-900 focus:text-gray-900"
           />
         </div>
