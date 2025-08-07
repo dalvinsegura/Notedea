@@ -120,6 +120,7 @@ export default function LiveMarkdownEditor({
             onKeyDown={handleKeyDown}
             onBlur={handleBlur}
             placeholder={placeholder}
+            id="note-content-textarea"
             className="w-full h-full min-h-[400px] p-4 border border-blue-300 rounded-lg outline-none resize-none text-gray-700 leading-relaxed focus:border-blue-500 focus:ring-2 focus:ring-blue-100 bg-white"
             style={{
               resize: "none",
